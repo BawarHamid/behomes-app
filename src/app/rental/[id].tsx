@@ -4,7 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 
 const RentalsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  console.log("~ file: [id].tsx:7 ~ RentalsScreen ~ id:", id);
+  // console.log("~ file: [id].tsx:7 ~ RentalsScreen ~ id:", id);
   return (
     <View>
       <Text>{id}</Text>

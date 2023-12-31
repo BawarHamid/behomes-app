@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-import Colors from "@/constants/Colors";
+import Colors from "@/src/constants/Colors";
 import { AntDesign, Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 
 const TabLayout = () => {
