@@ -5,22 +5,45 @@ import { SplashScreen, Stack, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as SecureStore from "expo-secure-store";
-import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import { ClerkProvider, SignedIn, useAuth } from "@clerk/clerk-expo";
+import { StatusBar } from "expo-status-bar";
 
-const clerkPublishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+// const { isLoaded, isSignedIn } = useAuth();
+// const router = useRouter();
 
+// useEffect(() => {
+//   console.log("Is The User Logged In?", isSignedIn);
+//   if (isLoaded && !isSignedIn) {
+//     router.push("/(modals)/(public)/SelectAuthModal");
+//   }
+// }, [isLoaded]);
+
+// useEffect(() => {
+//   if (!isLoaded) return;
+
+//   console.log("User changed: ", isSignedIn);
+
+//   if (isSignedIn) {
+//     router.replace("/(tabs)/profile");
+//   } else if (!isSignedIn) {
+//     router.replace("/(modals)/(public)/SelectAuthModal");
+//   }
+// }, [isSignedIn]);
+
+// Cache the Clerk JWT
 const tokenCache = {
   async getToken(key: string) {
     try {
       return SecureStore.getItemAsync(key);
-    } catch (error) {
+    } catch (err) {
       return null;
     }
   },
   async saveToken(key: string, value: string) {
     try {
       return SecureStore.setItemAsync(key, value);
-    } catch (error) {
+    } catch (err) {
       return;
     }
   },
@@ -65,31 +88,76 @@ export default function RootLayout() {
 
   return (
     <ClerkProvider
-      publishableKey={clerkPublishableKey!}
+      publishableKey={CLERK_PUBLISHABLE_KEY!}
       tokenCache={tokenCache}
     >
+      {/* tjek med IOS StatusBar - padding vil muligvis ændre sig. safeareaview skal bruges i stedet for view?. */}
+      <StatusBar style="dark" />
       <RootLayoutNav />
     </ClerkProvider>
   );
 }
 
 function RootLayoutNav() {
-  const router = useRouter();
   const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
+  // Automatically open login if user is not authenticated
+  // useEffect(() => {
+  //   console.log("Is The User Logged In?", isSignedIn);
+  //   if (!isSignedIn) {
+  //     router.push("/(modals)/(public)/SelectAuthModal");
+  //   } else if (isSignedIn) {
+  //     router.replace("/(tabs)/profile");
+  //   }
+  // }, [isLoaded]);
 
   useEffect(() => {
+    console.log("Is The User Logged In?", isSignedIn);
     if (isLoaded && !isSignedIn) {
-      router.push("/(modals)/LoginModal");
+      router.push("/(modals)/(public)/SelectAuthModal");
     }
   }, [isLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    console.log("User changed: ", isSignedIn);
+
+    if (isSignedIn) {
+      router.replace("/(tabs)/profile");
+    } else if (!isSignedIn) {
+      router.replace("/(modals)/(public)/SelectAuthModal");
+    }
+  }, [isSignedIn]);
 
   return (
     <Stack>
       {/* Stack for the alle the tabs thats grouped */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      {/* Stack-Screen for Selecting how to login */}
+      <Stack.Screen
+        name="(modals)/(public)/SelectAuthModal"
+        options={{
+          headerLeft: () => (
+            <TouchableOpacity onPress={router.back}>
+              <Ionicons
+                name="close-outline"
+                size={28}
+                color={Colors["primary-blue"]}
+              />
+            </TouchableOpacity>
+          ),
+          title: "Welcome",
+          presentation: "modal",
+          headerTitleStyle: {
+            fontFamily: "mon-semi-bold",
+          },
+          headerTitleAlign: "center",
+        }}
+      />
       {/* Stack-Screen for LoginModal */}
       <Stack.Screen
-        name="(modals)/LoginModal"
+        name="(modals)/(public)/LoginModal"
         options={{
           headerLeft: () => (
             <TouchableOpacity onPress={router.back}>
@@ -110,7 +178,7 @@ function RootLayoutNav() {
       />
       {/* Stack-Screen for RegisterModal/SignUp */}
       <Stack.Screen
-        name="(modals)/RegisterModal"
+        name="(modals)/(public)/RegisterModal"
         options={{
           headerLeft: () => (
             <TouchableOpacity onPress={router.back}>
@@ -122,6 +190,28 @@ function RootLayoutNav() {
             </TouchableOpacity>
           ),
           title: "Register",
+          presentation: "modal",
+          headerTitleStyle: {
+            fontFamily: "mon-semi-bold",
+          },
+          headerTitleAlign: "center",
+        }}
+      />
+      {/* Stack-Screen for ResetPassword */}
+      <Stack.Screen
+        name="(modals)/(public)/ResetPasswordModal"
+        options={{
+          headerLeft: () => (
+            <TouchableOpacity onPress={router.back}>
+              <Ionicons
+                name="close-outline"
+                size={28}
+                color={Colors["primary-blue"]}
+              />
+            </TouchableOpacity>
+          ),
+          title: "Reset Password",
+          animation: "slide_from_right",
           presentation: "modal",
           headerTitleStyle: {
             fontFamily: "mon-semi-bold",
@@ -151,7 +241,7 @@ function RootLayoutNav() {
       />
       {/* Stack-Screen for making a booking */}
       <Stack.Screen
-        name="(modals)/BookingModal"
+        name="(modals)/(auth)/BookingModal"
         options={{
           headerLeft: () => (
             <TouchableOpacity onPress={router.back}>

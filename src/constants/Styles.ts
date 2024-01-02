@@ -15,7 +15,7 @@ export const defaultStyles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   btn: {
-    backgroundColor: Colors["primary-blue"],
+    backgroundColor: Colors["primary-red"],
     height: 50,
     borderRadius: 8,
     justifyContent: "center",
@@ -41,5 +41,39 @@ export const defaultStyles = StyleSheet.create({
     paddingHorizontal: 20,
     borderTopColor: Colors["primary-medium-black"],
     borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  btnOutline: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: Colors["primary-medium-black"],
+    height: 50,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    paddingHorizontal: 10,
+  },
+  btnOutlineText: {
+    color: "#000000",
+    fontSize: 16,
+    fontFamily: "mon-semi-bold",
+  },
+});
+
+export const stylesLoginModal = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fffff",
+    padding: 26,
+  },
+  viewSeparator: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    marginVertical: 30,
+  },
+  textSeparator: {
+    fontFamily: "mon-semi-bold",
+    color: Colors["primary-medium-black"],
   },
 });

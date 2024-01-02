@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const RegisterModal = () => {
+const ResetPasswordModal = () => {
   return (
     <View>
-      <Text>RegisterModal</Text>
+      <Text>ResetKhaye</Text>
     </View>
   );
 };
 
-export default RegisterModal;
+export default ResetPasswordModal;
