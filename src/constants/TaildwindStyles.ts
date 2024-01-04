@@ -8,6 +8,14 @@ export const btn = `
   @apply flex justify-center items-center h-[50px] rounded-lg
 `;
 
+export const textFieldAuth = `
+@apply py-2 flex justify-center items-center border border-primary-blue rounded-full bg-[#fff]
+`;
+
+export const btnAuth = `
+  @apply flex justify-center items-center h-[50px] rounded-full
+`;
+
 export const btnText = `
   @apply text-white text-base font-[mon-bold]
 `;

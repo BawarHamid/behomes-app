@@ -12,14 +12,15 @@ import {
   btnText,
   textField,
 } from "@/src/constants/TaildwindStyles";
-import Colors from "@/src/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useOAuth } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginModal = () => {
   useWarmUpBrowser();
   const router = useRouter();
+  const [getMail] = useState<string>();
 
   enum Strategy {
     Google = "oauth_google",
@@ -57,6 +58,28 @@ const LoginModal = () => {
     }
   };
 
+  // const checkingEmail = async () => {
+  //   try {
+  //     const existingEmail = await AsyncStorage.getItem("loggedInEmail");
+  //     console.log("Existing email:", existingEmail);
+
+  //     if (existingEmail) {
+  //       if (existingEmail === getMail) {
+  //         // Email is already taken
+  //         console.log("Email is already taken");
+  //         router.push("/(modals)/(public)/LoginModal");
+  //       }
+  //     }
+  //     // Email is available
+  //     console.log("Email is available");
+  //     router.push("/(modals)/(public)/RegisterModal");
+  //   } catch (error) {
+  //     console.error("Error checking email existence:", error);
+  //     // Handle error as needed
+  //     alert(error);
+  //   }
+  // };
+
   return (
     // <View style={stylesLoginModal.container}>
     <View className="mt-[26px] px-[26px]">
@@ -75,6 +98,7 @@ const LoginModal = () => {
         className={`${btn} bg-primary-red`}
         onPress={() => {
           router.replace("/(modals)/(public)/LoginModal");
+          // checkingEmail();
         }}
       >
         <Text className={`${btnText}`}>Continue</Text>

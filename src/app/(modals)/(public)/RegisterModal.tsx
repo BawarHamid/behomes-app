@@ -1,18 +1,23 @@
-import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import React, { useState } from "react";
 import { useSignUp } from "@clerk/clerk-expo";
 import { TextInput } from "react-native-gesture-handler";
-import { btn, btnText, textField } from "@/src/constants/TaildwindStyles";
+import {
+  btnAuth,
+  btnText,
+  textFieldAuth,
+} from "@/src/constants/TaildwindStyles";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { defaultStyles } from "@/src/constants/Styles";
 import Colors from "@/src/constants/Colors";
 import Spinner from "react-native-loading-spinner-overlay";
-import { Stack } from "expo-router";
+import { Link } from "expo-router";
 
 const RegisterModal = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
-  const [email, setEmailAddress] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const [pendingVerification, setPendingVerification] =
     useState<boolean>(false);
@@ -26,9 +31,17 @@ const RegisterModal = () => {
     setLoading(true);
 
     try {
+      if (password !== confirmPassword) {
+        Alert.alert("Error", "The passwords do not match, try again!", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        return;
+      }
+
       await signUp.create({
         emailAddress: email,
         password: password,
+        username: username,
       });
 
       // Send verification Email
@@ -36,6 +49,7 @@ const RegisterModal = () => {
 
       // change the UI to verify the email address
       setPendingVerification(true);
+      // router.replace("/(tabs)/");
     } catch (err: any) {
       alert(err.errors[0].message);
     } finally {
@@ -72,6 +86,7 @@ const RegisterModal = () => {
 
       {!pendingVerification && (
         <>
+          {/* title - paragraph area */}
           <View className="items-center">
             <Ionicons
               name="md-logo-github"
@@ -79,41 +94,82 @@ const RegisterModal = () => {
               color={Colors["primary-blue"]}
               style={styles.iconTop}
             />
-
             <Text className="font-[mon-bold] text-2xl">Create Account</Text>
             <Text className="font-[mon-medium] text-lg whitespace-nowrap mt-1">
-              Enter your email and password
+              Enter all the requried information
             </Text>
           </View>
-          {/* input for email */}
+          {/* form-view start */}
           <View className="px-[20px] mt-20">
+            {/* input for username */}
             <View className="relative">
               <Ionicons
-                name="mail"
-                size={24}
+                name="person"
+                size={20}
                 color={Colors["primary-blue"]}
-                style={styles.emailIcon}
+                style={styles.leftSideIcon}
               />
-
+              <TextInput
+                autoCapitalize="none"
+                placeholder="Behomes Username"
+                className={`${textFieldAuth} pl-10`}
+                value={username}
+                onChangeText={setUsername}
+              />
+            </View>
+            {/* input for email */}
+            <View className="relative mt-3">
+              <Ionicons
+                name="mail"
+                size={20}
+                color={Colors["primary-blue"]}
+                style={styles.leftSideIcon}
+              />
               <TextInput
                 autoCapitalize="none"
                 placeholder="Email@behomes.com"
-                className={`${textField} pl-10`}
+                className={`${textFieldAuth} pl-10`}
                 value={email}
-                onChangeText={setEmailAddress}
+                onChangeText={setEmail}
               />
-              {/* <View className="absolute top-0 left-2 items-center justify-center h-full">
-            <Ionicons name="mail" size={24} color={Colors["primary-blue"]} style={styles.inputIcon} />
-          </View> */}
             </View>
             {/* input for password with on/off-hide */}
-            <View className="mt-3">
+            <View className="relative mt-3">
+              <Ionicons
+                name="lock-closed"
+                size={20}
+                color={Colors["primary-blue"]}
+                style={styles.leftSideIcon}
+              />
               <TextInput
                 secureTextEntry={!showPassword}
                 value={password}
                 onChangeText={setPassword}
-                className={`${textField}`}
+                className={`${textFieldAuth} pl-10`}
                 placeholder="Enter Password"
+              />
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off" : "eye"}
+                size={24}
+                color={Colors["primary-blue"]}
+                onPress={toggleShowPassword}
+                style={styles.eyeIcon}
+              />
+            </View>
+            {/* input for confirm password with on/off-hide */}
+            <View className="relative mt-3">
+              <Ionicons
+                name="lock-closed"
+                size={20}
+                color={Colors["primary-blue"]}
+                style={styles.leftSideIcon}
+              />
+              <TextInput
+                secureTextEntry={!showPassword}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                className={`${textFieldAuth} pl-10`}
+                placeholder="Confirm your password"
               />
               <MaterialCommunityIcons
                 name={showPassword ? "eye-off" : "eye"}
@@ -125,12 +181,28 @@ const RegisterModal = () => {
             </View>
             <View className="mt-6">
               <TouchableOpacity
-                className={`${btn} bg-primary-medium-black`}
+                className={`${btnAuth} bg-primary-medium-black active:bg-primary-medium-black active:opacity-80`}
                 onPress={handleSignUp}
+                disabled={
+                  !email ||
+                  !password ||
+                  !confirmPassword ||
+                  !username ||
+                  (!email && !password && !confirmPassword && !username)
+                }
               >
                 <Text className={`${btnText}`}>Create Account</Text>
               </TouchableOpacity>
             </View>
+          </View>
+          <View className="flex flex-row justify-center pr-1 mt-1">
+            <Text className="font-[mon-medium]">Already have an account? </Text>
+            <Link
+              className="font-[mon-medium] underline"
+              href={"/(modals)/(public)/LoginModal"}
+            >
+              Login here
+            </Link>
           </View>
         </>
       )}
@@ -140,16 +212,17 @@ const RegisterModal = () => {
             <TextInput
               value={verificationCode}
               placeholder="Enter verfication code...."
-              className={`${textField}`}
+              className={`${textFieldAuth} pl-5`}
               onChangeText={setVerificationCode}
             />
           </View>
           <View className="mt-6">
-            <Button
+            <TouchableOpacity
+              className={`${btnAuth} bg-primary-blue`}
               onPress={handleEmailVerification}
-              title="Verify Email"
-              color={Colors["primary-blue"]}
-            />
+            >
+              <Text className={`${btnText}`}>Verify Email</Text>
+            </TouchableOpacity>
           </View>
         </>
       )}
@@ -163,16 +236,16 @@ const styles = StyleSheet.create({
   iconTop: {
     marginBottom: 10,
   },
-  emailIcon: {
+  leftSideIcon: {
     position: "absolute",
     zIndex: 1,
-    top: 10,
-    left: 10,
+    top: 12,
+    left: 12,
   },
   eyeIcon: {
     position: "absolute",
-    top: 10,
-    right: 10,
+    top: 11,
+    right: 12,
     zIndex: 1,
   },
 });

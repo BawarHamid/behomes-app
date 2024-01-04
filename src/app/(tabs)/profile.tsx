@@ -5,7 +5,6 @@ import { ClerkProvider, useAuth, useUser } from "@clerk/clerk-expo";
 import { Link } from "expo-router";
 import Colors from "@/src/constants/Colors";
 import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 
 const ProfileTabScreen = () => {
   const { signOut, isSignedIn } = useAuth();

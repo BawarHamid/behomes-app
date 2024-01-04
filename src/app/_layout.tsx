@@ -111,22 +111,21 @@ function RootLayoutNav() {
   //   }
   // }, [isLoaded]);
 
-  useEffect(() => {
-    console.log("Is The User Logged In?", isSignedIn);
-    if (isLoaded && !isSignedIn) {
-      router.push("/(modals)/(public)/SelectAuthModal");
-    }
-  }, [isLoaded]);
+  // useEffect(() => {
+  //   console.log("Is The User Logged In?", isSignedIn);
+  //   if (isLoaded && !isSignedIn) {
+  //     router.push("/(modals)/(public)/SelectAuthModal");
+  //   }
+  // }, [isLoaded]);
 
   useEffect(() => {
     if (!isLoaded) return;
 
     console.log("User changed: ", isSignedIn);
-
     if (isSignedIn) {
-      router.replace("/(tabs)/profile");
+      router.replace("/(tabs)/");
     } else if (!isSignedIn) {
-      router.replace("/(modals)/(public)/SelectAuthModal");
+      router.push("/(modals)/(public)/SelectAuthModal");
     }
   }, [isSignedIn]);
 
