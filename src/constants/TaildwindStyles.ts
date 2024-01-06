@@ -8,16 +8,28 @@ export const btn = `
   @apply flex justify-center items-center h-[50px] rounded-lg
 `;
 
-export const textFieldAuth = `
-@apply py-2 flex justify-center items-center border border-primary-blue rounded-full bg-[#fff]
+export const authTextInput = `
+@apply py-2 flex justify-center items-center border border-primary-blue rounded-lg bg-[#fff]
 `;
 
 export const btnAuth = `
   @apply flex justify-center items-center h-[50px] rounded-full
 `;
 
+export const authOutlineBtn = `
+  @apply bg-white h-[50px] rounded-full flex justify-center items-center border shadow-sm border-primary-blue
+`;
+
+export const authOutlineBtnText = `
+  @apply text-primary-blue text-base font-[mon-semi-bold]
+`;
+
 export const btnText = `
   @apply text-white text-base font-[mon-bold]
+`;
+
+export const unAuthBtn = `
+@apply flex justify-center items-center h-[50px] rounded-lg w-28 ml-2 active:scale-90 transition-transform 
 `;
 
 export const btnIcon = `

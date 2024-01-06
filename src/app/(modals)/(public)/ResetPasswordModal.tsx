@@ -12,10 +12,10 @@ import Spinner from "react-native-loading-spinner-overlay";
 import {
   btnAuth,
   btnText,
-  textFieldAuth,
+  authTextInput,
 } from "@/src/constants/TaildwindStyles";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/src/constants/Colors";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const ResetPasswordModal = () => {
   const [email, setEmail] = useState<string>("");
@@ -23,7 +23,7 @@ const ResetPasswordModal = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [resetVerificationCode, setResetVerificationCode] =
     useState<string>("");
-  const [successfulCreation, setSuccessfulCreation] = useState(false);
+  const [emailExisting, setEmailExisting] = useState(false);
   const { signIn, setActive } = useSignIn();
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +35,7 @@ const ResetPasswordModal = () => {
         identifier: email,
       });
       // Hvis reset_password_email_code bliver sendt, så bliver anden ui-skærm vist.
-      setSuccessfulCreation(true);
+      setEmailExisting(true);
     } catch (err: any) {
       alert(err.errors[0].message);
     }
@@ -70,13 +70,13 @@ const ResetPasswordModal = () => {
   };
 
   return (
-    <View className="mt-[26px] px-[26px]">
+    <View className="mt-[26px] px-[22px]">
       <Spinner visible={loading} />
 
-      {!successfulCreation && (
+      {!emailExisting && (
         <>
           {/* title - paragraph area */}
-          <View className="items-center">
+          <View className="items-center mt-5">
             <Text className="font-[mon-bold] text-2xl">
               Get verification code
             </Text>
@@ -87,12 +87,12 @@ const ResetPasswordModal = () => {
           <View className="mt-6">
             <TextInput
               value={email}
-              placeholder="Enter e-mail"
-              className={`${textFieldAuth} pl-5`}
+              placeholder="Email address"
+              className={`${authTextInput} pl-5`}
               onChangeText={setEmail}
             />
           </View>
-          <View className="mt-4">
+          <View className="mt-6">
             <TouchableOpacity
               className={`${btnAuth} bg-primary-blue`}
               onPress={handleResetPasswordRequest}
@@ -103,10 +103,10 @@ const ResetPasswordModal = () => {
         </>
       )}
 
-      {successfulCreation && (
+      {emailExisting && (
         <>
           {/* title - paragraph area */}
-          <View className="items-center">
+          <View className="items-center mt-5">
             <Text className="font-[mon-bold] text-2xl">
               Start reset process
             </Text>
@@ -115,34 +115,28 @@ const ResetPasswordModal = () => {
             </Text>
           </View>
           {/* form-view start */}
-          <View className="px-[20px] mt-20">
+          <View className="mt-16">
             {/* input for verification code */}
             <View>
               <TextInput
                 autoCapitalize="none"
-                placeholder="Enter the verification code"
-                className={`${textFieldAuth} pl-5`}
+                placeholder="Verification code"
+                className={`${authTextInput} pl-5`}
                 value={resetVerificationCode}
                 onChangeText={setResetVerificationCode}
               />
             </View>
             {/* input for password with on/off-hide */}
-            <View className="relative mt-3">
-              <Ionicons
-                name="lock-closed"
-                size={20}
-                color={Colors["primary-blue"]}
-                style={styles.leftSideIcon}
-              />
+            <View className="mt-3">
               <TextInput
                 secureTextEntry={!showPassword}
                 value={newPassword}
                 onChangeText={setNewPassword}
-                className={`${textFieldAuth} pl-10`}
-                placeholder="Enter Password"
+                className={`${authTextInput} pl-4`}
+                placeholder="Password"
               />
               <MaterialCommunityIcons
-                name={showPassword ? "eye-off" : "eye"}
+                name={showPassword ? "eye" : "eye-off"}
                 size={24}
                 color={Colors["primary-blue"]}
                 onPress={toggleShowPassword}
@@ -150,22 +144,16 @@ const ResetPasswordModal = () => {
               />
             </View>
             {/* input for confirm password with on/off-hide */}
-            <View className="relative mt-3">
-              <Ionicons
-                name="lock-closed"
-                size={20}
-                color={Colors["primary-blue"]}
-                style={styles.leftSideIcon}
-              />
+            <View className="mt-3">
               <TextInput
                 secureTextEntry={!showPassword}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                className={`${textFieldAuth} pl-10`}
-                placeholder="Confirm your password"
+                className={`${authTextInput} pl-4`}
+                placeholder="Confirm password"
               />
               <MaterialCommunityIcons
-                name={showPassword ? "eye-off" : "eye"}
+                name={showPassword ? "eye" : "eye-off"}
                 size={24}
                 color={Colors["primary-blue"]}
                 onPress={toggleShowPassword}
@@ -174,7 +162,7 @@ const ResetPasswordModal = () => {
             </View>
             <View className="mt-6">
               <TouchableOpacity
-                className={`${btnAuth} bg-primary-medium-black active:bg-primary-medium-black active:opacity-80`}
+                className={`${btnAuth} bg-primary-yellow active:bg-primary-medium-black active:opacity-80`}
                 onPress={handleResetOfPassword}
                 disabled={
                   !newPassword ||
@@ -183,7 +171,9 @@ const ResetPasswordModal = () => {
                   (!newPassword && !confirmPassword && !resetVerificationCode)
                 }
               >
-                <Text className={`${btnText}`}>Change Password</Text>
+                <Text className="text-base font-[mon-bold] text-primary-black">
+                  Change Password
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -198,12 +188,6 @@ export default ResetPasswordModal;
 const styles = StyleSheet.create({
   iconTop: {
     marginBottom: 10,
-  },
-  leftSideIcon: {
-    position: "absolute",
-    zIndex: 1,
-    top: 12,
-    left: 12,
   },
   eyeIcon: {
     position: "absolute",

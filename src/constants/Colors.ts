@@ -19,6 +19,9 @@ export default {
   "primary-red": "#FF385C",
   "primary-grey": "#5E5D5E",
   "primary-blue": "#455CC6",
+  // "primary-blue": "#0000FF",
   "primary-medium-black": "#222222",
   dark: "#1A1A1A",
+  "primary-yellow": "#FFC409",
+  "primary-black": "#000000",
 };

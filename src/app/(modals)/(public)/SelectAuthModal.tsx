@@ -81,23 +81,16 @@ const LoginModal = () => {
   // };
 
   return (
-    // <View style={stylesLoginModal.container}>
     <View className="mt-[26px] px-[26px]">
-      {/* <TextInput
-        autoCapitalize="none"
-        placeholder="Email"
-        style={[defaultStyles.inputField, { marginBottom: 30 }]}
-      /> */}
       <TextInput
         autoCapitalize="none"
         placeholder="Email"
         className={`mb-[30px] ${textField}`}
       />
-      {/* <TouchableOpacity style={defaultStyles.btn}> */}
       <TouchableOpacity
         className={`${btn} bg-primary-red`}
         onPress={() => {
-          router.replace("/(modals)/(public)/LoginModal");
+          router.push("/(modals)/(public)/LoginModal");
           // checkingEmail();
         }}
       >
@@ -129,14 +122,14 @@ const LoginModal = () => {
 
       <View className="gap-4">
         {/* btn for login with Phone */}
-        <TouchableOpacity className={`${btnOutline}`}>
+        {/* <TouchableOpacity className={`${btnOutline}`}>
           <Text className={`${btnOutlineText}`}>Continue with Phone</Text>
           <Ionicons
             name="md-phone-portrait-outline"
             size={24}
             style={defaultStyles.btnIcon}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {/* btn for login with Apple-account */}
         <TouchableOpacity
           className={`${btnOutline}`}

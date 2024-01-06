@@ -5,12 +5,12 @@ import { TextInput } from "react-native-gesture-handler";
 import {
   btnAuth,
   btnText,
-  textFieldAuth,
+  authTextInput,
 } from "@/src/constants/TaildwindStyles";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "@/src/constants/Colors";
 import Spinner from "react-native-loading-spinner-overlay";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 const RegisterModal = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -19,10 +19,12 @@ const RegisterModal = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [pendingVerification, setPendingVerification] =
     useState<boolean>(false);
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSignUp = async () => {
     if (!isLoaded) {
@@ -79,8 +81,12 @@ const RegisterModal = () => {
     setShowPassword(!showPassword);
   };
 
+  const toggleShowConfirmedPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
-    <View className="mt-[26px] px-[26px]">
+    <View className="mt-[26px]">
       {/* <Stack.Screen options={{ headerBackVisible: !pendingVerification }} /> */}
       <Spinner visible={loading} />
 
@@ -100,56 +106,38 @@ const RegisterModal = () => {
             </Text>
           </View>
           {/* form-view start */}
-          <View className="px-[20px] mt-20">
+          <View className="mt-20 px-[22px]">
             {/* input for username */}
-            <View className="relative">
-              <Ionicons
-                name="person"
-                size={20}
-                color={Colors["primary-blue"]}
-                style={styles.leftSideIcon}
-              />
+            <View className="mt-3">
               <TextInput
                 autoCapitalize="none"
-                placeholder="Behomes Username"
-                className={`${textFieldAuth} pl-10`}
+                placeholder="Username"
+                className={`${authTextInput} pl-4`}
                 value={username}
                 onChangeText={setUsername}
               />
             </View>
             {/* input for email */}
-            <View className="relative mt-3">
-              <Ionicons
-                name="mail"
-                size={20}
-                color={Colors["primary-blue"]}
-                style={styles.leftSideIcon}
-              />
+            <View className="mt-3">
               <TextInput
                 autoCapitalize="none"
-                placeholder="Email@behomes.com"
-                className={`${textFieldAuth} pl-10`}
+                placeholder="Email address"
+                className={`${authTextInput} pl-4`}
                 value={email}
                 onChangeText={setEmail}
               />
             </View>
             {/* input for password with on/off-hide */}
-            <View className="relative mt-3">
-              <Ionicons
-                name="lock-closed"
-                size={20}
-                color={Colors["primary-blue"]}
-                style={styles.leftSideIcon}
-              />
+            <View className="mt-3">
               <TextInput
                 secureTextEntry={!showPassword}
                 value={password}
                 onChangeText={setPassword}
-                className={`${textFieldAuth} pl-10`}
-                placeholder="Enter Password"
+                className={`${authTextInput} pl-4`}
+                placeholder="Password"
               />
               <MaterialCommunityIcons
-                name={showPassword ? "eye-off" : "eye"}
+                name={showPassword ? "eye" : "eye-off"}
                 size={24}
                 color={Colors["primary-blue"]}
                 onPress={toggleShowPassword}
@@ -157,25 +145,19 @@ const RegisterModal = () => {
               />
             </View>
             {/* input for confirm password with on/off-hide */}
-            <View className="relative mt-3">
-              <Ionicons
-                name="lock-closed"
-                size={20}
-                color={Colors["primary-blue"]}
-                style={styles.leftSideIcon}
-              />
+            <View className="mt-3">
               <TextInput
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showConfirmPassword}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                className={`${textFieldAuth} pl-10`}
-                placeholder="Confirm your password"
+                className={`${authTextInput} pl-4`}
+                placeholder="Confirm password"
               />
               <MaterialCommunityIcons
-                name={showPassword ? "eye-off" : "eye"}
+                name={showConfirmPassword ? "eye" : "eye-off"}
                 size={24}
                 color={Colors["primary-blue"]}
-                onPress={toggleShowPassword}
+                onPress={toggleShowConfirmedPassword}
                 style={styles.eyeIcon}
               />
             </View>
@@ -195,14 +177,17 @@ const RegisterModal = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <View className="flex flex-row justify-center pr-1 mt-1">
-            <Text className="font-[mon-medium]">Already have an account? </Text>
-            <Link
-              className="font-[mon-medium] underline"
-              href={"/(modals)/(public)/LoginModal"}
+
+          <View className="mt-2">
+            <TouchableOpacity
+              onPress={() => router.push("/(modals)/(public)/LoginModal")}
+              className="flex flex-row justify-center"
             >
-              Login here
-            </Link>
+              <Text className="font-[mon-semi-bold] mr-1">
+                Already have an account?
+              </Text>
+              <Text className="font-[mon-bold] underline">Login here</Text>
+            </TouchableOpacity>
           </View>
         </>
       )}
@@ -212,7 +197,7 @@ const RegisterModal = () => {
             <TextInput
               value={verificationCode}
               placeholder="Enter verfication code...."
-              className={`${textFieldAuth} pl-5`}
+              className={`${authTextInput} pl-5`}
               onChangeText={setVerificationCode}
             />
           </View>
@@ -235,12 +220,6 @@ export default RegisterModal;
 const styles = StyleSheet.create({
   iconTop: {
     marginBottom: 10,
-  },
-  leftSideIcon: {
-    position: "absolute",
-    zIndex: 1,
-    top: 12,
-    left: 12,
   },
   eyeIcon: {
     position: "absolute",

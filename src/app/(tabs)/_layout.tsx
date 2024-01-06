@@ -18,6 +18,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
+          headerTitleAlign: "center",
           tabBarLabel: "Explore",
           headerTitle: "Explore",
           tabBarIcon: ({ color, size }) => (
@@ -29,6 +30,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="wishlists"
         options={{
+          headerTitleAlign: "center",
           tabBarLabel: "Wishlists",
           headerTitle: "Wishlists",
           tabBarIcon: ({ color, size }) => (
@@ -40,6 +42,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="trips"
         options={{
+          headerTitleAlign: "center",
           tabBarLabel: "Trips",
           headerTitle: "Trips",
           tabBarIcon: ({ color, size }) => (
@@ -51,6 +54,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="inbox"
         options={{
+          headerTitleAlign: "center",
           tabBarLabel: "Inbox",
           headerTitle: "Inbox",
           tabBarIcon: ({ color, size }) => (
@@ -62,6 +66,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="profile"
         options={{
+          headerTitleAlign: "center",
           tabBarLabel: "Profile",
           headerTitle: "Profile",
           tabBarIcon: ({ color, size }) => (
