@@ -22,7 +22,7 @@ type RentalsProps = {
 const Rentals: React.FC<RentalsProps> = ({ listOfRentals, category }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const listRef = useRef<FlatList>(null);
-  const [addPlace, setAddPlace] = useState<boolean>(false);
+  const [saveForLater, setSaveForLater] = useState<boolean>(false);
 
   useEffect(() => {
     // console.log("Reload:", listOfRentals.length);
@@ -34,7 +34,7 @@ const Rentals: React.FC<RentalsProps> = ({ listOfRentals, category }) => {
   }, [category]);
 
   const changeHeartIcon = () => {
-    setAddPlace(!addPlace);
+    setSaveForLater(!saveForLater);
   };
 
   const renderRow: ListRenderItem<any> = ({ item }) => (
@@ -52,7 +52,7 @@ const Rentals: React.FC<RentalsProps> = ({ listOfRentals, category }) => {
           <View className="absolute right-7 top-8">
             <TouchableOpacity onPress={changeHeartIcon}>
               <Ionicons
-                name={addPlace ? "heart" : "heart-outline"}
+                name={saveForLater ? "heart" : "heart-outline"}
                 size={24}
                 color={Colors["primary-red"]}
               />

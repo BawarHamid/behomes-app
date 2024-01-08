@@ -5,8 +5,9 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Share,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import rentalsDummyData from "@/src/utils/data/airbnb-listings-cph92.json";
 import Colors from "@/src/constants/Colors";
@@ -30,6 +31,21 @@ const RentalsScreen = () => {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const navigaton = useNavigation();
+  const [saveForLater, setSaveForLater] = useState<boolean>(false);
+  const [share, setShare] = useState<boolean>(false);
+
+  const shareRental = async () => {
+    setShare(!share);
+    try {
+      await Share.share({
+        title: rental.name,
+        url: rental.listing_url,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useLayoutEffect(() => {
     navigaton.setOptions({
       headerBackground: () => (
@@ -38,19 +54,24 @@ const RentalsScreen = () => {
           style={headerAnimatedStyle}
         />
       ),
-
       headerRight: () => (
         <View className="flex flex-row items-center justify-center gap-[10px]">
-          <TouchableOpacity className="w-10 h-10 rounded-full bg-white items-center justify-center">
+          <TouchableOpacity
+            className="w-10 h-10 rounded-full bg-white items-center justify-center"
+            onPress={shareRental}
+          >
             <Ionicons
-              name="share-social"
+              name={share ? "share-social" : "share-social-outline"}
               color={Colors["primary-black"]}
               size={24}
             />
           </TouchableOpacity>
-          <TouchableOpacity className="w-10 h-10 rounded-full bg-white items-center justify-center">
+          <TouchableOpacity
+            className="w-10 h-10 rounded-full bg-white items-center justify-center"
+            onPress={changeHeartIcon}
+          >
             <Ionicons
-              name="heart-outline"
+              name={saveForLater ? "heart" : "heart-outline"}
               color={Colors["primary-black"]}
               size={24}
             />
@@ -98,6 +119,10 @@ const RentalsScreen = () => {
       opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
     };
   }, []);
+
+  const changeHeartIcon = () => {
+    setSaveForLater(!saveForLater);
+  };
 
   return (
     <View className="bg-white flex-1">
