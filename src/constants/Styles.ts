@@ -37,9 +37,9 @@ export const defaultStyles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: "#FFFFFF",
-    paddingVertical: 10,
+    paddingVertical: 20,
     paddingHorizontal: 20,
-    borderTopColor: Colors["primary-medium-black"],
+    borderTopColor: Colors["primary-grey"],
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   btnOutline: {

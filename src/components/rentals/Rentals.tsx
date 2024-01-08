@@ -25,7 +25,7 @@ const Rentals: React.FC<RentalsProps> = ({ listOfRentals, category }) => {
   const [addPlace, setAddPlace] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("Reload:", listOfRentals.length);
+    // console.log("Reload:", listOfRentals.length);
     setLoading(true);
     //false loading, no backend implemented. just timingout for 20 sec.
     setTimeout(() => {
@@ -73,9 +73,9 @@ const Rentals: React.FC<RentalsProps> = ({ listOfRentals, category }) => {
           <Text className="text-start">{item.room_type}</Text>
           <View className="flex flex-row items-center">
             <Text className="text-start font-[mon-bold]">
-              {item.price} kr DKK
+              {item.price} DKK/kr
             </Text>
-            <Text className="font-[mon-normal] ml-1">nat</Text>
+            <Text className="font-[mon-normal] ml-1">night</Text>
           </View>
         </Animated.View>
       </TouchableOpacity>

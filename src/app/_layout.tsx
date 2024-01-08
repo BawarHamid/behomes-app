@@ -121,7 +121,7 @@ function RootLayoutNav() {
   useEffect(() => {
     if (!isLoaded) return;
 
-    console.log("User changed: ", isSignedIn);
+    // console.log("User changed: ", isSignedIn);
     if (isSignedIn) {
       router.replace("/(tabs)/");
     } else if (!isSignedIn) {
@@ -218,24 +218,14 @@ function RootLayoutNav() {
           headerTitleAlign: "center",
         }}
       />
-      {/* Stack-Screen for viewing a palce by id */}
+      {/* Stack-Screen for viewing a palce by clicking */}
       <Stack.Screen
         name="rental/[id]"
         options={{
-          animation: "fade",
-          title: "",
+          headerTitle: "",
           headerTitleStyle: {
             fontFamily: "mon-semi-bold",
           },
-          headerLeft: () => (
-            <TouchableOpacity onPress={router.back}>
-              <Ionicons
-                name="close-outline"
-                size={28}
-                color={Colors["primary-blue"]}
-              />
-            </TouchableOpacity>
-          ),
         }}
       />
       {/* Stack-Screen for making a booking */}
