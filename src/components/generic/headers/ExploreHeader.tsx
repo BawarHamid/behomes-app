@@ -1,15 +1,21 @@
-import { View, Text } from "react-native";
-import React, { useRef, useState } from "react";
 import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  FontAwesome,
-  Ionicons,
-  Fontisto,
-  FontAwesome5,
-} from "@expo/vector-icons";
+  View,
+  Text,
+  StyleSheet,
+  // TouchableOpacity,
+  // ScrollView,
+  LayoutChangeEvent,
+} from "react-native";
+import React, { useRef, useState } from "react";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import Colors from "@/src/constants/Colors";
+import * as Haptics from "expo-haptics";
+
+type ExploreHeaderProps = {
+  onCategoryChanged: (category: string) => void;
+};
 
 const headerCategories = [
   {
@@ -22,11 +28,11 @@ const headerCategories = [
   },
   {
     name: "Trending",
-    icon: "local-fire-department",
+    icon: "fire",
   },
   {
     name: "Castles",
-    icon: "fort-awesome",
+    icon: "castle",
   },
   {
     name: "Tiny homes",
@@ -38,11 +44,11 @@ const headerCategories = [
   },
   {
     name: "Cabins",
-    icon: "house-siding",
+    icon: "greenhouse",
   },
   {
     name: "Beach",
-    icon: "umbrella-beach",
+    icon: "beach",
   },
   {
     name: "Camper vans",
@@ -50,7 +56,7 @@ const headerCategories = [
   },
   {
     name: "Arctic",
-    icon: "snowflake-o",
+    icon: "snowflake",
   },
   {
     name: "Tropical",
@@ -58,13 +64,38 @@ const headerCategories = [
   },
 ];
 
-const ExploreHeader = () => {
-  const itemsRef = useRef<Array<TouchableOpacity>>([]);
-  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+const ExploreHeader: React.FC<ExploreHeaderProps> = ({ onCategoryChanged }) => {
+  const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
+  const [activeCategory, setActiveCategory] = useState<number>(0);
+  const scrollRef = useRef<ScrollView>(null);
+  const categoryWidth = 86; // Set the width of each category item
+  const [scrollViewWidth, setScrollViewWidth] = useState<number>(0);
+
+  const handleContentLayout = (event: LayoutChangeEvent) => {
+    setScrollViewWidth(event.nativeEvent.layout.width);
+  };
+
+  const selectedCategory = (categoryIndex: number) => {
+    setActiveCategory(categoryIndex);
+
+    let offsetX =
+      categoryIndex * categoryWidth - scrollViewWidth / 2 + categoryWidth / 2;
+    offsetX = Math.max(
+      0,
+      Math.min(
+        offsetX,
+        headerCategories.length * categoryWidth - scrollViewWidth
+      )
+    );
+
+    scrollRef.current?.scrollTo({ x: offsetX, y: 0, animated: true });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    onCategoryChanged(headerCategories[categoryIndex].name);
+  };
 
   return (
-    <View className="bg-white h-[138px]">
-      <View className="flex flex-row items-center justify-between px-5 my-2 border border-gray-100 rounded-full py-3 mx-5 shadow-lg shadow-gray-500 bg-white">
+    <View className="bg-white h-[150px]" style={styles.outerView}>
+      <View className="mt-3 flex flex-row items-center justify-between px-5 border border-gray-100 rounded-full py-2 mx-5 shadow-lg shadow-gray-500 bg-white">
         <View>
           <Link href={"/(modals)/(auth)/BookingModal"}>
             <TouchableOpacity>
@@ -87,23 +118,43 @@ const ExploreHeader = () => {
         </TouchableOpacity>
       </View>
       <ScrollView
+        ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           alignItems: "center",
-          gap: 20,
-          paddingHorizontal: 14,
+          gap: 28,
+          paddingHorizontal: 16,
         }}
+        onLayout={handleContentLayout}
       >
-        {headerCategories.map((cat, key) => (
-          <TouchableOpacity key={key} className="items-center">
-            <MaterialIcons size={24} name={cat.icon as any} />
-            {/* <MaterialCommunityIcons size={24} name={cat.icon as any} />
-            <FontAwesome size={24} name={cat.icon as any} />
-            <Ionicons size={24} name={cat.icon as any} />
-            <Fontisto size={24} name={cat.icon as any} />
-            <FontAwesome5 size={24} name={cat.icon as any} /> */}
-            <Text>{cat.name}</Text>
+        {headerCategories.map((category, index) => (
+          <TouchableOpacity
+            onPress={() => selectedCategory(index)}
+            className={`py-4 flex-[1px] items-center justify-center pb-[8px] ${
+              activeCategory === index ? "border-b-2 border-primary-black" : ""
+            }`}
+            key={index}
+            ref={(categoryElements) =>
+              (itemsRef.current[index] = categoryElements)
+            }
+          >
+            <MaterialCommunityIcons
+              size={30}
+              name={category.icon as any}
+              color={
+                activeCategory === index ? Colors["primary-black"] : "#9CA3AF"
+              }
+            />
+            <Text
+              style={
+                activeCategory === index
+                  ? styles.categoryTextActive
+                  : styles.categoryText
+              }
+            >
+              {category.name}
+            </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -112,3 +163,19 @@ const ExploreHeader = () => {
 };
 
 export default ExploreHeader;
+
+const styles = StyleSheet.create({
+  outerView: {
+    elevation: 2,
+  },
+  categoryText: {
+    fontSize: 14,
+    fontFamily: "mon-bold",
+    color: "#9CA3AF",
+  },
+  categoryTextActive: {
+    fontSize: 14,
+    fontFamily: "mon-bold",
+    color: Colors["primary-black"],
+  },
+});

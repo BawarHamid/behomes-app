@@ -11,7 +11,6 @@ import { Link, useRouter } from "expo-router";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import Colors from "@/src/constants/Colors";
 import {
   btnText,
   authTextInput,
@@ -21,6 +20,7 @@ import {
   authOutlineBtnText,
 } from "@/src/constants/TaildwindStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Colors from "@/src/constants/Colors";
 
 const LoginModal = () => {
   const [email, setEmail] = useState<string>("");

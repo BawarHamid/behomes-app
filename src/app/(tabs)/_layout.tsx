@@ -8,6 +8,9 @@ const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
+        tabBarItemStyle: {
+          paddingVertical: 2,
+        },
         tabBarActiveTintColor: Colors["primary-blue"],
         tabBarLabelStyle: {
           fontFamily: "mon-semi-bold",
@@ -18,9 +21,10 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
+          headerStatusBarHeight: -25,
           headerTitleAlign: "center",
           tabBarLabel: "Explore",
-          headerTitle: "Explore",
+          headerTitle: "",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="search" color={color} size={size} />
           ),
