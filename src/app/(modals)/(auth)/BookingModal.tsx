@@ -58,6 +58,7 @@ const BookingModal = () => {
   const onClearAll = () => {
     setSelectedPlace(0);
     setOpenCard(0);
+    setGroups(guestsGroups); //clearing all
   };
 
   return (
