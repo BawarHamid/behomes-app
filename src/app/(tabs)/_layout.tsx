@@ -21,7 +21,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          headerStatusBarHeight: -25,
+          // headerStatusBarHeight: -25,
           headerTitleAlign: "center",
           tabBarLabel: "Explore",
           headerTitle: "",
@@ -70,9 +70,8 @@ const TabLayout = () => {
       <Tabs.Screen
         name="profile"
         options={{
-          headerTitleAlign: "center",
           tabBarLabel: "Profile",
-          headerTitle: "Profile",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-circle-outline" color={color} size={size} />
           ),

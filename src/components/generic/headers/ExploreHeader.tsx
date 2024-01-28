@@ -12,6 +12,7 @@ import { Link } from "expo-router";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Colors from "@/src/constants/Colors";
 import * as Haptics from "expo-haptics";
+import { SafeAreaView } from "react-native";
 
 type ExploreHeaderProps = {
   onCategoryChanged: (category: string) => void;
@@ -94,79 +95,92 @@ const ExploreHeader: React.FC<ExploreHeaderProps> = ({ onCategoryChanged }) => {
   };
 
   return (
-    <View className="bg-white h-[150px]" style={styles.outerView}>
-      <View className="mt-3 flex flex-row items-center justify-between px-5 border border-gray-100 rounded-full py-2 mx-5 shadow-lg shadow-gray-500 bg-white">
-        <View>
-          <Link href={"/(modals)/(auth)/BookingModal"}>
-            <TouchableOpacity>
-              <View className="rounded-full">
-                <Ionicons name="search" size={26} color={"black"} />
+    <SafeAreaView className="bg-white">
+      <View className="h-[150px] mt-10 bg-white">
+        <View className=" bg-white mt-3 flex flex-row items-center justify-between px-5 border border-gray-100 rounded-full py-2 mx-5 shadow-lg shadow-gray-500">
+          <View>
+            <Link href={"/(modals)/(auth)/BookingModal"}>
+              <TouchableOpacity>
+                <View className="rounded-full">
+                  <Ionicons name="search" size={26} color={"black"} />
+                </View>
+              </TouchableOpacity>
+              <View className="px-4">
+                <Text className="font-[mon-bold] text-xs text-primary-black">
+                  Where to?
+                </Text>
+                <Text className="font-[mon-semi-bold] text-xs text-primary-grey">
+                  Anywhere · Any week · Add guests
+                </Text>
               </View>
-            </TouchableOpacity>
-            <View className="px-4">
-              <Text className="font-[mon-bold] text-xs text-primary-black">
-                Where to?
-              </Text>
-              <Text className="font-[mon-semi-bold] text-xs text-primary-grey">
-                Anywhere · Any week · Add guests
-              </Text>
-            </View>
-          </Link>
+            </Link>
+          </View>
+          <TouchableOpacity className="rounded-full py-2 border border-gray-200 px-2">
+            <Ionicons name="options-outline" size={22} color={"black"} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity className="rounded-full py-2 border border-gray-200 px-2">
-          <Ionicons name="options-outline" size={22} color={"black"} />
-        </TouchableOpacity>
-      </View>
-      <ScrollView
-        ref={scrollRef}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          alignItems: "center",
-          gap: 28,
-          paddingHorizontal: 16,
-        }}
-        onLayout={handleContentLayout}
-      >
-        {headerCategories.map((category, index) => (
-          <TouchableOpacity
-            onPress={() => selectedCategory(index)}
-            className={`py-4 flex-[1px] items-center justify-center pb-[8px] ${
-              activeCategory === index ? "border-b-2 border-primary-black" : ""
-            }`}
-            key={index}
-            ref={(categoryElements) =>
-              (itemsRef.current[index] = categoryElements)
-            }
-          >
-            <MaterialCommunityIcons
-              size={30}
-              name={category.icon as any}
-              color={
-                activeCategory === index ? Colors["primary-black"] : "#9CA3AF"
-              }
-            />
-            <Text
-              style={
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            alignItems: "center",
+            gap: 28,
+            paddingHorizontal: 16,
+          }}
+          onLayout={handleContentLayout}
+        >
+          {headerCategories.map((category, index) => (
+            <TouchableOpacity
+              onPress={() => selectedCategory(index)}
+              className={`py-4 flex-[1px] items-center justify-center pb-[8px] ${
                 activeCategory === index
-                  ? styles.categoryTextActive
-                  : styles.categoryText
+                  ? "border-b-2 border-primary-black"
+                  : ""
+              }`}
+              key={index}
+              ref={(categoryElements) =>
+                (itemsRef.current[index] = categoryElements)
               }
             >
-              {category.name}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+              <MaterialCommunityIcons
+                size={30}
+                name={category.icon as any}
+                color={
+                  activeCategory === index ? Colors["primary-black"] : "#9CA3AF"
+                }
+              />
+              <Text
+                style={
+                  activeCategory === index
+                    ? styles.categoryTextActive
+                    : styles.categoryText
+                }
+              >
+                {category.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default ExploreHeader;
 
 const styles = StyleSheet.create({
-  outerView: {
+  container: {
+    backgroundColor: "#fff",
+    height: 130,
     elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: {
+      width: 1,
+      height: 10,
+    },
   },
   categoryText: {
     fontSize: 14,

@@ -13,16 +13,28 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/src/constants/Colors";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import {
+  BottomSheetFlatList,
+  BottomSheetFlatListMethods,
+} from "@gorhom/bottom-sheet";
+import { defaultStyles } from "@/src/constants/Styles";
 
 type RentalsProps = {
-  listOfRentals: any[];
+  rentalList: any[];
   category: string;
+  refresh: number;
 };
 
-const Rentals: React.FC<RentalsProps> = ({ listOfRentals, category }) => {
+const Rentals: React.FC<RentalsProps> = ({ rentalList, category, refresh }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const listRef = useRef<FlatList>(null);
   const [saveForLater, setSaveForLater] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (refresh) {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [refresh]);
 
   useEffect(() => {
     // console.log("Reload:", listOfRentals.length);
@@ -86,7 +98,12 @@ const Rentals: React.FC<RentalsProps> = ({ listOfRentals, category }) => {
       <FlatList
         renderItem={renderRow}
         ref={listRef}
-        data={loading ? [] : listOfRentals}
+        data={loading ? [] : rentalList}
+        ListHeaderComponent={
+          <Text className="items-center text-center font-[mon-semi-bold]">
+            {rentalList.length} {category}
+          </Text>
+        }
       />
     </View>
   );

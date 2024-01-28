@@ -7,6 +7,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import * as SecureStore from "expo-secure-store";
 import { ClerkProvider, SignedIn, useAuth } from "@clerk/clerk-expo";
 import { StatusBar } from "expo-status-bar";
+import BookingModalHeaderText from "../components/booking/BookingModalHeaderText";
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 // const { isLoaded, isSignedIn } = useAuth();
@@ -233,21 +234,21 @@ function RootLayoutNav() {
         name="(modals)/(auth)/BookingModal"
         options={{
           headerLeft: () => (
-            <TouchableOpacity onPress={router.back}>
+            <TouchableOpacity
+              className="border-gray-300 rounded-full border bg-white p-1"
+              onPress={router.back}
+            >
               <Ionicons
                 name="close-outline"
-                size={28}
+                size={20}
                 color={Colors["primary-blue"]}
               />
             </TouchableOpacity>
           ),
           animation: "fade",
           presentation: "transparentModal",
-          title: "Start booking",
-          headerTitleStyle: {
-            fontFamily: "mon-semi-bold",
-          },
-          headerTitleAlign: "center",
+          headerTransparent: true,
+          headerTitle: (props) => <BookingModalHeaderText />,
         }}
       />
     </Stack>
